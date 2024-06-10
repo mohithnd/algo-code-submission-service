@@ -7,6 +7,8 @@ async function app(fastify, options) {
   fastify.register(servicePlugin);
 
   fastify.register(require("./routes/api/apiRoutes"), { prefix: "/api" });
+
+  fastify.register(require("./routes/todoRoutes"), { prefix: "/todos" });
 }
 
 module.exports = fastifyPlugin(app);
