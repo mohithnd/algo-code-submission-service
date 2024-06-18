@@ -18,7 +18,7 @@ class SubmissionService {
       id: submissionEntry._id,
       code: submissionEntry.code,
       language: submissionEntry.language,
-      inputCase: submission.testCase,
+      inputCases: submission.testCases,
     });
     return { queueResponse: response, submissionEntry };
   }
