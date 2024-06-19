@@ -1,3 +1,4 @@
+const SubmissionCreationError = require("../errors/submissionCreationError");
 const submissionProducer = require("../producers/submissionProducer");
 
 class SubmissionService {
@@ -10,8 +11,9 @@ class SubmissionService {
       submission
     );
     if (!submissionEntry) {
-      // TODO: Add Error Handling
-      throw { message: "Not Able To Create Submission" };
+      throw new SubmissionCreationError(
+        "Failed To Create A Submission In The MongoDB Database."
+      );
     }
 
     const response = await submissionProducer({
