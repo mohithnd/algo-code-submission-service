@@ -18,6 +18,7 @@ class SubmissionService {
 
     const response = await submissionProducer({
       id: submissionEntry._id,
+      problemId: submissionEntry.problemId,
       code: submissionEntry.code,
       language: submissionEntry.language,
       inputCases: submission.testCases,
