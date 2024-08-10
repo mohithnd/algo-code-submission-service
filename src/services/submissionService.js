@@ -1,3 +1,4 @@
+const { fetchProblemDetails } = require("../apis/problemAdminApi");
 const SubmissionCreationError = require("../errors/submissionCreationError");
 const submissionProducer = require("../producers/submissionProducer");
 
@@ -16,13 +17,39 @@ class SubmissionService {
       );
     }
 
-    const response = await submissionProducer({
+    const problemAdminApiResponse = await fetchProblemDetails(
+      submissionEntry.problemId
+    );
+
+    if (!problemAdminApiResponse) {
+      throw new SubmissionCreationError("Failed To Create A Submission");
+    }
+
+    const codeStubs = problemAdminApiResponse.data.codeStubs;
+    let currLangCodeStub;
+    for (let i = 0; i < codeStubs.length; i++) {
+      if (codeStubs[i].language == submissionEntry.language) {
+        currLangCodeStub = codeStubs[i];
+      }
+    }
+
+    if (!currLangCodeStub) {
+      throw new SubmissionCreationError("Failed To Create A Submission");
+    }
+
+    const submissionPayload = {
       id: submissionEntry._id,
       problemId: submissionEntry.problemId,
-      code: submissionEntry.code,
+      code:
+        currLangCodeStub.startSnippet +
+        submissionEntry.code +
+        currLangCodeStub.endSnippet,
       language: submissionEntry.language,
-      inputCases: submission.testCases,
-    });
+      testCases: problemAdminApiResponse.data.testcases,
+    };
+
+    const response = await submissionProducer(submissionPayload);
+
     return { queueResponse: response, submissionEntry };
   }
 }
