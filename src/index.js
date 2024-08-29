@@ -2,6 +2,7 @@ const app = require("./app");
 const { PORT } = require("./config/serverConfig");
 const connectToDB = require("./config/dbConfig");
 const errorHandler = require("./utils/errorHandler");
+const resultWorker = require("./workers/resultWorker");
 
 const fastify = require("fastify")({ logger: true });
 
@@ -17,4 +18,6 @@ fastify.listen({ port: PORT }, async (err) => {
   await connectToDB();
 
   console.log(`Server Is Running At Port ${PORT}`);
+
+  resultWorker("ResultQueue");
 });
