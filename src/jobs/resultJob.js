@@ -1,5 +1,6 @@
 const { Job } = require("bullmq");
 const Submission = require("../models/submissionModel");
+const { sendPayload } = require("../apis/socketServerPayloadApi");
 
 class ResultJob {
   constructor(payload) {
@@ -25,6 +26,8 @@ class ResultJob {
         await submission.save();
 
         console.log(submission);
+
+        sendPayload(submission.userId, submission);
       }
     }
   };
