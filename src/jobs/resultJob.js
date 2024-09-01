@@ -1,6 +1,7 @@
-const { Job } = require("bullmq");
-const Submission = require("../models/submissionModel");
 const { sendPayload } = require("../apis/socketServerPayloadApi");
+const SubmissionRepository = require("../repositories/submissionRepository");
+
+const submissionRepository = new SubmissionRepository();
 
 class ResultJob {
   constructor(payload) {
@@ -12,7 +13,7 @@ class ResultJob {
     console.log("handler of The Result Job Called");
 
     if (job) {
-      const submission = await Submission.findById(this.payload.id);
+      const submission = submissionRepository.getSubmission(this.payload.id);
 
       if (submission) {
         if (this.payload.stderr.length > 0) {
@@ -23,11 +24,15 @@ class ResultJob {
 
         submission.stdout = this.payload.stdout;
         submission.stderr = this.payload.stderr;
-        await submission.save();
 
-        console.log(submission);
+        let updatedSubmission = await submissionRepository.updateSubmission(
+          this.payload.id,
+          submission
+        );
 
-        sendPayload(submission.userId, submission);
+        console.log(updatedSubmission);
+
+        sendPayload(updatedSubmission.userId, updatedSubmission);
       }
     }
   };
