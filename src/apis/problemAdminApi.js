@@ -7,7 +7,8 @@ async function fetchProblemDetails(problemId) {
       `${PROBLEM_ADMIN_SERVICE_URI}/${problemId}`
     );
     console.log(response.data);
-    if (response.success == false) {
+
+    if (!response.data.success) {
       throw new Error("Problem ID Not Found");
     }
     return response.data;

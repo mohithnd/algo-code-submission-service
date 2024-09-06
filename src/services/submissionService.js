@@ -27,9 +27,10 @@ class SubmissionService {
 
     const codeStubs = problemAdminApiResponse.data.codeStubs;
     let currLangCodeStub;
-    for (let i = 0; i < codeStubs.length; i++) {
-      if (codeStubs[i].language == submissionEntry.language) {
-        currLangCodeStub = codeStubs[i];
+    for (const stub of codeStubs) {
+      if (stub.language === submissionEntry.language) {
+        currLangCodeStub = stub;
+        break;
       }
     }
 

@@ -7,7 +7,7 @@ async function sendPayload(userId, payload) {
       userId,
       payload,
     });
-    if (response.data.success == false) {
+    if (!response.data.success) {
       throw new Error(response.data.message);
     }
     console.log(response.data);

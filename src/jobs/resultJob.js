@@ -13,7 +13,9 @@ class ResultJob {
     console.log("handler of The Result Job Called");
 
     if (job) {
-      const submission = submissionRepository.getSubmission(this.payload.id);
+      const submission = await submissionRepository.getSubmission(
+        this.payload.id
+      );
 
       if (submission) {
         if (this.payload.stderr.length > 0) {

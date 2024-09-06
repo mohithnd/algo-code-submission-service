@@ -1,9 +1,9 @@
-const { Job, Worker } = require("bullmq");
+const { Worker } = require("bullmq");
 const redisConnection = require("../config/redisConfig");
 const ResultJob = require("../jobs/resultJob");
 
 function resultWorker(queueName) {
-  new Worker(
+  return new Worker(
     queueName,
     async (job) => {
       if (job.name === "ResultJob") {
